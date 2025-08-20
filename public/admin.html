@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Panel Admin</title>
+<style>
+  :root{--bg:#0b1220;--panel:#111a2b;--muted:#8aa0c8;--brd:#1c2a46;--acc:#2563eb}
+  body{margin:0;font-family:system-ui,Arial;background:var(--bg);color:#e8eefc}
+  header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--brd)}
+  main{padding:20px;display:grid;gap:20px;grid-template-columns:1fr 1fr}
+  .card{background:var(--panel);border:1px solid var(--brd);border-radius:16px;padding:18px}
+  h2{margin:0 0 10px}
+  input,textarea,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--brd);background:#0f172a;color:#e8eefc;margin:6px 0}
+  button{padding:10px 14px;border-radius:10px;border:0;background:var(--acc);color:#fff;font-weight:600;cursor:pointer}
+  small{color:var(--muted)}
+  table{width:100%;border-collapse:collapse;margin-top:10px}
+  th,td{border-bottom:1px solid var(--brd);padding:8px;text-align:left}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .inline{display:flex;gap:8px;align-items:center}
+  @media(max-width:1000px){ main{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<header>
+  <div><strong>Panel Admin</strong></div>
+  <div class="inline">
+    <button id="btn-logout">Salir</button>
+  </div>
+</header>
+
+<main>
+  <!-- Textos -->
+  <section class="card">
+    <h2>Textos</h2>
+    <label>Saludo del menú</label>
+    <textarea id="greeting" rows="3"></textarea>
+    <label>Intro de productos</label>
+    <input id="productIntro" />
+    <label>Pistas (pie de cada respuesta)</label>
+    <input id="hints" placeholder="5. 💳 Ir a pagar / 8. 🔁 Volver al menú" />
+    <label>Opciones de menú (1 por línea)</label>
+    <textarea id="menuLines" rows="6"></textarea>
+    <div class="inline"><button id="saveTexts">Guardar textos</button></div>
+  </section>
+
+  <!-- Imágenes -->
+  <section class="card">
+    <h2>Imágenes</h2>
+    <div class="row">
+      <div>
+        <label>Imagen de saludo</label>
+        <input type="file" id="fileSaludo" />
+        <button onclick="uploadSet('saludo','fileSaludo')">Subir & Guardar</button>
+      </div>
+      <div>
+        <label>QR por defecto</label>
+        <input type="file" id="fileQR" />
+        <button onclick="uploadSet('qr','fileQR')">Subir & Guardar</button>
+      </div>
+    </div>
+    <hr style="border-color:#1c2a46">
+    <label>Referencias (se agrega de a 1)</label>
+    <div class="inline">
+      <input type="file" id="fileRef" />
+      <button onclick="uploadSet('references:add','fileRef')">Agregar</button>
+      <button onclick="fetch('/api/images',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({field:'references:clear'})}).then(load)">Vaciar</button>
+    </div>
+  </section>
+
+  <!-- Países -->
+  <section class="card" style="grid-column:1/-1">
+    <h2>Países</h2>
+    <div class="inline">
+      <input id="searchCountry" placeholder="Buscar (nombre, key o moneda)..." />
+      <button onclick="loadCountries()">Buscar</button>
+      <button onclick="document.getElementById('formCountry').scrollIntoView({behavior:'smooth'})">Añadir/Editar</button>
+    </div>
+
+    <table id="tblCountries">
+      <thead><tr><th>Key</th><th>País</th><th>Moneda</th><th>Acciones</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- Form país -->
+  <section id="formCountry" class="card" style="grid-column:1/-1">
+    <h2>Añadir / Editar país</h2>
+    <div class="row">
+      <div><label>Key (ej. peru)</label><input id="c_key" placeholder="minúsculas, sin espacios"/></div>
+      <div><label>Etiqueta/Nombre</label><input id="c_label" placeholder="Perú"/></div>
+    </div>
+    <div class="row">
+      <div><label>Moneda (ISO, ej. PEN)</label><input id="c_currency" placeholder="PEN"/></div>
+      <div><label>Banco</label><input id="c_bank"/></div>
+    </div>
+    <div class="row">
+      <div><label>Número de cuenta</label><input id="c_account"/></div>
+      <div><label>Titular</label><input id="c_owner"/></div>
+    </div>
+    <div class="row">
+      <div><label>QR (URL de imagen, opcional)</label><input id="c_qr"/></div>
+      <div class="inline"><span></span><button onclick="saveCountry()">Guardar país</button></div>
+    </div>
+
+    <h3>Precios</h3>
+    <small>Introduce números (sin símbolo). El símbolo se mostrará según la moneda del país.</small>
+    <div class="row">
+      <div>
+        <label>Compartido 1 (JSON)</label>
+        <textarea id="c_shared1" rows="4">{ "1 mes": 0, "2 meses": 0, "6 meses": 0, "1 año": 0 }</textarea>
+      </div>
+      <div>
+        <label>Compartido 2 (JSON)</label>
+        <textarea id="c_shared2" rows="4">{ "1 mes": 0, "2 meses": 0, "6 meses": 0 }</textarea>
+      </div>
+    </div>
+    <label>Individual (JSON)</label>
+    <textarea id="c_individual" rows="4">{ "1 mes": 0, "2 meses": 0, "6 meses": 0, "1 año": 0 }</textarea>
+  </section>
+</main>
+
+<script>
+  async function load(){
+    const r = await fetch('/api/config'); const cfg = await r.json();
+    document.getElementById('greeting').value = cfg.texts.greeting || '';
+    document.getElementById('productIntro').value = cfg.texts.productIntro || '';
+    document.getElementById('hints').value = cfg.texts.hints || '';
+    document.getElementById('menuLines').value = (cfg.texts.menu||[]).join('\n');
+    loadCountries();
+  }
+  async function loadCountries(){
+    const q = document.getElementById('searchCountry').value || '';
+    const r = await fetch('/api/countries?q=' + encodeURIComponent(q));
+    const {items} = await r.json();
+    const tb = document.querySelector('#tblCountries tbody');
+    tb.innerHTML = '';
+    items.forEach(it=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${it.key}</td>
+        <td>${it.label}</td>
+        <td>${it.currency}</td>
+        <td class="inline">
+          <button onclick='fill("${it.key}")'>Editar</button>
+          <button onclick='delCountry("${it.key}")' style="background:#ef4444">Eliminar</button>
+        </td>`;
+      tb.appendChild(tr);
+    });
+  }
+  function parseJsonSafe(txt, def){ try{const o = JSON.parse(txt); return o && typeof o==="object" ? o : def;}catch{ return def; } }
+  async function saveTexts(){
+    const greeting = document.getElementById('greeting').value;
+    const productIntro = document.getElementById('productIntro').value;
+    const hints = document.getElementById('hints').value;
+    const menu = document.getElementById('menuLines').value.split('\n').map(s=>s.trim()).filter(Boolean);
+    await fetch('/api/texts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({greeting,productIntro,hints,menu})});
+    alert('Textos guardados');
+  }
+  document.getElementById('saveTexts').onclick = saveTexts;
+
+  async function uploadSet(field, inputId){
+    const f = document.getElementById(inputId).files[0];
+    if (!f) return alert('Elige un archivo');
+    const fd = new FormData(); fd.append('file', f);
+    const r = await fetch('/api/upload',{method:'POST',body:fd});
+    const {path} = await r.json();
+    await fetch('/api/images',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({field, value:path})});
+    alert('Guardado: ' + path);
+  }
+
+  async function saveCountry(){
+    const key = document.getElementById('c_key').value.trim().toLowerCase();
+    const label = document.getElementById('c_label').value.trim();
+    const currency = document.getElementById('c_currency').value.trim().toUpperCase();
+    const payment = {
+      bank: document.getElementById('c_bank').value.trim(),
+      account: document.getElementById('c_account').value.trim(),
+      owner: document.getElementById('c_owner').value.trim(),
+      qr: document.getElementById('c_qr').value.trim()
+    };
+    const prices = {
+      shared1: parseJsonSafe(document.getElementById('c_shared1').value, {}),
+      shared2: parseJsonSafe(document.getElementById('c_shared2').value, {}),
+      individual: parseJsonSafe(document.getElementById('c_individual').value, {})
+    };
+    if (!key || !label || !currency) return alert('Key, etiqueta y moneda requeridas');
+    await fetch('/api/countries',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key,label,currency,payment,prices})});
+    alert('País guardado'); loadCountries();
+  }
+  async function delCountry(key){
+    if (!confirm('Eliminar país ' + key + '?')) return;
+    await fetch('/api/countries/' + key,{method:'DELETE'});
+    loadCountries();
+  }
+  async function fill(key){
+    const r = await fetch('/api/countries?q=' + key); const {items} = await r.json();
+    const it = (items||[]).find(i=>i.key===key); if (!it) return;
+    document.getElementById('c_key').value = key;
+    document.getElementById('c_label').value = it.label||'';
+    document.getElementById('c_currency').value = it.currency||'';
+    document.getElementById('c_bank').value = it.payment?.bank||'';
+    document.getElementById('c_account').value = it.payment?.account||'';
+    document.getElementById('c_owner').value = it.payment?.owner||'';
+    document.getElementById('c_qr').value = it.payment?.qr||'';
+    document.getElementById('c_shared1').value = JSON.stringify(it.prices?.shared1||{}, null, 1);
+    document.getElementById('c_shared2').value = JSON.stringify(it.prices?.shared2||{}, null, 1);
+    document.getElementById('c_individual').value = JSON.stringify(it.prices?.individual||{}, null, 1);
+    document.getElementById('formCountry').scrollIntoView({behavior:'smooth'});
+  }
+
+  document.getElementById('btn-logout').onclick = async ()=>{ await fetch('/api/logout',{method:'POST'}); location.href='/login.html'; };
+
+  load();
+</script>
+</body>
+</html>
