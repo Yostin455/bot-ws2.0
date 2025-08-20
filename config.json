@@ -1,6 +1,12 @@
 {
   "admins": ["59167568482@s.whatsapp.net", "59160457616@s.whatsapp.net"],
-  "images": { "saludo": "", "qr": "", "references": [] },
+
+  "images": {
+    "saludo": "",
+    "qr": "",
+    "references": []
+  },
+
   "texts": {
     "greeting": "Hola, soy *Samantha*. Estoy aquí para ayudarte a elegir el plan perfecto, resolver dudas y acompañarte en todo el proceso ✨",
     "menu": [
@@ -13,6 +19,7 @@
     ],
     "productIntro": "Estos son nuestros planes disponibles en tu país:"
   },
+
   "currencySymbols": {
     "BOB": "Bs",
     "ARS": "$",
@@ -21,6 +28,7 @@
     "USD": "$",
     "EUR": "€"
   },
+
   "countries": {
     "bolivia": {
       "label": "Bolivia",
