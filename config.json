@@ -1,10 +1,6 @@
 {
   "admins": ["59167568482@s.whatsapp.net", "59160457616@s.whatsapp.net"],
-  "images": {
-    "saludo": "",
-    "qr": "",
-    "references": []
-  },
+  "images": { "saludo": "", "qr": "", "references": [] },
   "texts": {
     "greeting": "Hola, soy *Samantha*. Estoy aquí para ayudarte a elegir el plan perfecto, resolver dudas y acompañarte en todo el proceso ✨",
     "menu": [
@@ -15,8 +11,7 @@
       "5. 💳 Ir a pagar",
       "8. 🔁 Volver al menú"
     ],
-    "productIntro": "Estos son nuestros planes disponibles en tu país:",
-    "hints": "5. 💳 Ir a pagar\n8. 🔁 Volver al menú"
+    "productIntro": "Estos son nuestros planes disponibles en tu país:"
   },
   "currencySymbols": {
     "BOB": "Bs",
