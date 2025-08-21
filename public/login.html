@@ -3,19 +3,23 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Login</title>
+  <title>Login — Samantha</title>
   <style>
-    body{font-family:system-ui,Arial;background:#0b1220;color:#e8eefc;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
-    .card{background:#111a2b;border:1px solid #1c2a46;border-radius:16px;padding:28px;width:360px;box-shadow:0 10px 30px #0006}
-    h1{margin:0 0 16px}
-    input{width:100%;margin:8px 0;padding:12px;border-radius:10px;border:1px solid #2a3b5f;background:#0f172a;color:#e8eefc}
-    button{width:100%;padding:12px;border-radius:10px;border:0;background:#2563eb;color:white;font-weight:600;cursor:pointer}
-    .msg{margin-top:10px;color:#ffb4b4}
+    :root{--bg:#0b1220;--panel:#111a2b;--muted:#8aa0c8;--brd:#1c2a46;--acc:#2563eb}
+    *{box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:#e8eefc;margin:0;display:flex;align-items:center;justify-content:center;height:100vh}
+    .card{width:360px;background:var(--panel);border:1px solid var(--brd);border-radius:16px;padding:26px;box-shadow:0 10px 30px #0006}
+    h1{margin:0 0 10px}
+    p{color:var(--muted);margin:0 0 16px}
+    input{width:100%;margin:8px 0 12px;padding:12px;border-radius:10px;border:1px solid var(--brd);background:#0f172a;color:#e8eefc}
+    button{width:100%;padding:12px;border-radius:10px;border:0;background:var(--acc);color:#fff;font-weight:600;cursor:pointer}
+    .msg{margin-top:12px;color:#ffb4b4;min-height:20px}
   </style>
 </head>
 <body>
   <div class="card">
     <h1>Acceder</h1>
+    <p>Panel de administración de Samantha</p>
     <input id="user" placeholder="Usuario" autocomplete="username" />
     <input id="pass" placeholder="Contraseña" type="password" autocomplete="current-password" />
     <button id="btn">Entrar</button>
@@ -23,17 +27,26 @@
   </div>
 
   <script>
-    document.getElementById('btn').onclick = async () => {
-      const user = document.getElementById('user').value.trim();
-      const pass = document.getElementById('pass').value.trim();
-      const r = await fetch('/api/login', {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({user, pass})
-      });
-      if (r.ok) location.href = '/admin.html';
-      else document.getElementById('msg').textContent = 'Usuario o contraseña incorrectos';
+    const $ = (s)=>document.querySelector(s);
+    $("#btn").onclick = async () => {
+      $("#msg").textContent = "";
+      const user = $("#user").value.trim();
+      const pass = $("#pass").value.trim();
+      if(!user || !pass){ $("#msg").textContent="Completa usuario y contraseña"; return; }
+      try{
+        const r = await fetch('/api/login', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({user, pass})
+        });
+        if (r.ok) location.href = '/admin.html';
+        else $("#msg").textContent = 'Usuario o contraseña incorrectos';
+      }catch(e){
+        $("#msg").textContent = 'Error de red: ' + e.message;
+      }
     };
+    // Enter para enviar
+    document.addEventListener('keydown',e=>{ if(e.key==='Enter') $("#btn").click(); });
   </script>
 </body>
 </html>

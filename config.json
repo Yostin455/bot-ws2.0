@@ -1,25 +1,24 @@
 {
-  "admins": ["59167568482@s.whatsapp.net", "59160457616@s.whatsapp.net"],
-
+  "admins": ["59167568482@s.whatsapp.net","59160457616@s.whatsapp.net"],
   "images": {
     "saludo": "",
     "qr": "",
     "references": []
   },
-
   "texts": {
-    "greeting": "Hola, soy *Samantha*. Estoy aquí para ayudarte a elegir el plan perfecto, resolver dudas y acompañarte en todo el proceso ✨",
+    "greeting": "Hola, soy *Samantha*. Estoy aquí para ayudarte ✨",
     "menu": [
       "1. 💲 Ver productos y precios irresistibles.",
       "2. 💎 ¿Qué es ChatGPT PLUS?",
       "3. 🖼️ Ver referencias.",
       "4. 🤝 Conectar con un vendedor.",
       "5. 💳 Ir a pagar",
+      "6. 📦 Plan Compartido",
+      "7. 👤 Plan Individual",
       "8. 🔁 Volver al menú"
     ],
     "productIntro": "Estos son nuestros planes disponibles en tu país:"
   },
-
   "currencySymbols": {
     "BOB": "Bs",
     "ARS": "$",
@@ -28,7 +27,6 @@
     "USD": "$",
     "EUR": "€"
   },
-
   "countries": {
     "bolivia": {
       "label": "Bolivia",
@@ -38,26 +36,6 @@
         "shared1": { "1 mes": 35, "2 meses": 60, "6 meses": 169, "1 año": 329 },
         "shared2": { "1 mes": 60, "2 meses": 109, "6 meses": 309 },
         "individual": { "1 mes": 139, "2 meses": 269, "6 meses": 599, "1 año": 1579 }
-      }
-    },
-    "argentina": {
-      "label": "Argentina",
-      "currency": "ARS",
-      "payment": { "bank": "Banco Nación", "account": "CBU/ALIAS 000-111", "owner": "Titular AR", "qr": "" },
-      "prices": {
-        "shared1": { "1 mes": 3500, "2 meses": 6000 },
-        "shared2": { "1 mes": 6000, "2 meses": 10900 },
-        "individual": { "1 mes": 13900, "2 meses": 26900 }
-      }
-    },
-    "mexico": {
-      "label": "México",
-      "currency": "MXN",
-      "payment": { "bank": "BBVA", "account": "CLABE 012345678901234567", "owner": "Titular MX", "qr": "" },
-      "prices": {
-        "shared1": { "1 mes": 100, "2 meses": 180 },
-        "shared2": { "1 mes": 180, "2 meses": 340 },
-        "individual": { "1 mes": 550, "2 meses": 990 }
       }
     }
   }

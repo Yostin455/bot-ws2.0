@@ -3,7 +3,3 @@
 node_modules/
 auth/
 data/auth/
-
-# editorios comunes
-.vscode/
-.DS_Store

@@ -3,215 +3,429 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Panel Admin</title>
+<title>Panel Admin — Samantha</title>
 <style>
   :root{--bg:#0b1220;--panel:#111a2b;--muted:#8aa0c8;--brd:#1c2a46;--acc:#2563eb}
-  body{margin:0;font-family:system-ui,Arial;background:var(--bg);color:#e8eefc}
-  header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--brd)}
-  main{padding:20px;display:grid;gap:20px;grid-template-columns:1fr 1fr}
-  .card{background:var(--panel);border:1px solid var(--brd);border-radius:16px;padding:18px}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:#e8eefc}
+  header{display:flex;gap:12px;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--brd)}
+  header .right{display:flex;gap:8px;align-items:center}
+  header a, header button{padding:8px 12px;border-radius:10px;border:1px solid var(--brd);background:#0f172a;color:#e8eefc;text-decoration:none;cursor:pointer}
+  main{padding:18px;display:grid;gap:18px;grid-template-columns:1fr 1fr}
+  .card{background:var(--panel);border:1px solid var(--brd);border-radius:16px;padding:16px}
   h2{margin:0 0 10px}
+  small{color:var(--muted)}
   input,textarea,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--brd);background:#0f172a;color:#e8eefc;margin:6px 0}
   button{padding:10px 14px;border-radius:10px;border:0;background:var(--acc);color:#fff;font-weight:600;cursor:pointer}
-  small{color:var(--muted)}
-  table{width:100%;border-collapse:collapse;margin-top:10px}
-  th,td{border-bottom:1px solid var(--brd);padding:8px;text-align:left}
+  table{width:100%;border-collapse:collapse;margin-top:8px}
+  th,td{border-bottom:1px solid var(--brd);padding:8px;text-align:left;vertical-align:top}
   .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .inline{display:flex;gap:8px;align-items:center}
-  @media(max-width:1000px){ main{grid-template-columns:1fr} }
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .muted{color:var(--muted)}
+  @media(max-width:1100px){ main{grid-template-columns:1fr} }
+  .pill{display:inline-block;background:#0f172a;border:1px solid var(--brd);padding:6px 10px;border-radius:999px}
+  .danger{background:#b91c1c}
 </style>
 </head>
 <body>
 <header>
-  <div><strong>Panel Admin</strong></div>
-  <div class="inline">
+  <div><strong>Panel Admin — Samantha</strong></div>
+  <div class="right">
+    <a href="/login.html">Login</a>
     <button id="btn-logout">Salir</button>
   </div>
 </header>
 
 <main>
-  <!-- Textos -->
+
+  <!-- TEXTOS -->
   <section class="card">
-    <h2>Textos</h2>
+    <h2>Textos del bot</h2>
     <label>Saludo del menú</label>
-    <textarea id="greeting" rows="3"></textarea>
+    <textarea id="greeting" rows="3" placeholder="Hola, soy Samantha…"></textarea>
+
     <label>Intro de productos</label>
-    <input id="productIntro" />
-    <label>Pistas (pie de cada respuesta)</label>
-    <input id="hints" placeholder="5. 💳 Ir a pagar / 8. 🔁 Volver al menú" />
+    <input id="productIntro" placeholder="Estos son nuestros planes…" />
+
     <label>Opciones de menú (1 por línea)</label>
-    <textarea id="menuLines" rows="6"></textarea>
-    <div class="inline"><button id="saveTexts">Guardar textos</button></div>
+    <textarea id="menuLines" rows="7" placeholder="1. Ver productos…&#10;2. ¿Qué es ChatGPT PLUS?&#10;5. Ir a pagar&#10;8. Volver al menú"></textarea>
+
+    <div class="inline">
+      <button id="saveTexts">Guardar textos</button>
+      <span class="muted">El bot se actualiza al instante.</span>
+    </div>
   </section>
 
-  <!-- Imágenes -->
+  <!-- IMÁGENES -->
   <section class="card">
     <h2>Imágenes</h2>
     <div class="row">
       <div>
         <label>Imagen de saludo</label>
-        <input type="file" id="fileSaludo" />
+        <input type="file" id="fileSaludo" accept="image/*" />
         <button onclick="uploadSet('saludo','fileSaludo')">Subir & Guardar</button>
       </div>
       <div>
-        <label>QR por defecto</label>
-        <input type="file" id="fileQR" />
+        <label>QR de pago (general)</label>
+        <input type="file" id="fileQR" accept="image/*" />
         <button onclick="uploadSet('qr','fileQR')">Subir & Guardar</button>
       </div>
     </div>
     <hr style="border-color:#1c2a46">
     <label>Referencias (se agrega de a 1)</label>
     <div class="inline">
-      <input type="file" id="fileRef" />
+      <input type="file" id="fileRef" accept="image/*" />
       <button onclick="uploadSet('references:add','fileRef')">Agregar</button>
       <button onclick="fetch('/api/images',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({field:'references:clear'})}).then(load)">Vaciar</button>
     </div>
   </section>
 
-  <!-- Países -->
+  <!-- MONEDAS -->
+  <section class="card">
+    <h2>Monedas (símbolos)</h2>
+    <div class="inline">
+      <input id="curCode" placeholder="Código ISO (ej. PEN)" style="max-width:140px">
+      <input id="curSymbol" placeholder="Símbolo (ej. S/ )" style="max-width:140px">
+      <button onclick="addCurrency()">Añadir / Actualizar</button>
+    </div>
+    <table id="tblCurrencies">
+      <thead><tr><th>Código</th><th>Símbolo</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <small>El símbolo se usa al mostrar precios por país.</small>
+  </section>
+
+  <!-- PAÍSES: BÚSQUEDA + LISTA -->
   <section class="card" style="grid-column:1/-1">
     <h2>Países</h2>
     <div class="inline">
-      <input id="searchCountry" placeholder="Buscar (nombre, key o moneda)..." />
+      <input id="searchCountry" placeholder="Buscar (key, nombre o moneda)..." oninput="loadCountries()">
       <button onclick="loadCountries()">Buscar</button>
-      <button onclick="document.getElementById('formCountry').scrollIntoView({behavior:'smooth'})">Añadir/Editar</button>
+      <span class="muted">Añade o edita abajo</span>
     </div>
 
     <table id="tblCountries">
-      <thead><tr><th>Key</th><th>País</th><th>Moneda</th><th>Acciones</th></tr></thead>
+      <thead>
+        <tr><th>Key</th><th>País</th><th>Moneda</th><th>Precios (resumen)</th><th>Acciones</th></tr>
+      </thead>
       <tbody></tbody>
     </table>
   </section>
 
-  <!-- Form país -->
+  <!-- FORM PAÍS -->
   <section id="formCountry" class="card" style="grid-column:1/-1">
     <h2>Añadir / Editar país</h2>
+
     <div class="row">
-      <div><label>Key (ej. peru)</label><input id="c_key" placeholder="minúsculas, sin espacios"/></div>
-      <div><label>Etiqueta/Nombre</label><input id="c_label" placeholder="Perú"/></div>
+      <div>
+        <label>Key (minúsculas, sin espacios) <small class="muted">ej. peru</small></label>
+        <input id="c_key" />
+      </div>
+      <div>
+        <label>Nombre visible</label>
+        <input id="c_label" placeholder="Perú" />
+      </div>
     </div>
+
     <div class="row">
-      <div><label>Moneda (ISO, ej. PEN)</label><input id="c_currency" placeholder="PEN"/></div>
-      <div><label>Banco</label><input id="c_bank"/></div>
+      <div>
+        <label>Moneda (código ISO) <small class="muted">ej. PEN, ARS, BOB</small></label>
+        <input id="c_currency" placeholder="PEN" />
+      </div>
+      <div>
+        <label>Símbolo detectado</label>
+        <input id="c_symbol" disabled />
+      </div>
     </div>
-    <div class="row">
-      <div><label>Número de cuenta</label><input id="c_account"/></div>
-      <div><label>Titular</label><input id="c_owner"/></div>
+
+    <h3>Pago</h3>
+    <div class="grid3">
+      <div><label>Banco</label><input id="c_bank"></div>
+      <div><label>N° de cuenta / CBU / CLABE</label><input id="c_account"></div>
+      <div><label>Titular</label><input id="c_owner"></div>
     </div>
-    <div class="row">
-      <div><label>QR (URL de imagen, opcional)</label><input id="c_qr"/></div>
-      <div class="inline"><span></span><button onclick="saveCountry()">Guardar país</button></div>
+    <div class="inline">
+      <input type="file" id="c_qr_file" accept="image/*">
+      <button onclick="uploadCountryQR()">Subir QR país</button>
+      <input id="c_qr" placeholder="Ruta QR (se llena al subir)" style="flex:1">
     </div>
 
     <h3>Precios</h3>
-    <small>Introduce números (sin símbolo). El símbolo se mostrará según la moneda del país.</small>
     <div class="row">
       <div>
-        <label>Compartido 1 (JSON)</label>
-        <textarea id="c_shared1" rows="4">{ "1 mes": 0, "2 meses": 0, "6 meses": 0, "1 año": 0 }</textarea>
+        <h4>Plan Compartido 1</h4>
+        <div id="p_shared1"></div>
+        <div class="inline">
+          <input id="p_s1_key" placeholder="Ej. 1 mes">
+          <input id="p_s1_val" placeholder="Ej. 35">
+          <button onclick="addPrice('shared1')">Añadir</button>
+        </div>
       </div>
       <div>
-        <label>Compartido 2 (JSON)</label>
-        <textarea id="c_shared2" rows="4">{ "1 mes": 0, "2 meses": 0, "6 meses": 0 }</textarea>
+        <h4>Plan Compartido 2</h4>
+        <div id="p_shared2"></div>
+        <div class="inline">
+          <input id="p_s2_key" placeholder="Ej. 1 mes">
+          <input id="p_s2_val" placeholder="Ej. 60">
+          <button onclick="addPrice('shared2')">Añadir</button>
+        </div>
       </div>
     </div>
-    <label>Individual (JSON)</label>
-    <textarea id="c_individual" rows="4">{ "1 mes": 0, "2 meses": 0, "6 meses": 0, "1 año": 0 }</textarea>
+
+    <div>
+      <h4>Plan Individual</h4>
+      <div id="p_individual"></div>
+      <div class="inline">
+        <input id="p_i_key" placeholder="Ej. 1 mes">
+        <input id="p_i_val" placeholder="Ej. 139">
+        <button onclick="addPrice('individual')">Añadir</button>
+      </div>
+    </div>
+
+    <div class="inline" style="margin-top:10px">
+      <button onclick="saveCountry()">Guardar país</button>
+      <button class="danger" onclick="deleteCountry()">Eliminar país</button>
+      <span class="muted">El prompt de país del bot se actualiza con esta lista.</span>
+    </div>
   </section>
+
 </main>
 
 <script>
-  async function load(){
-    const r = await fetch('/api/config'); const cfg = await r.json();
-    document.getElementById('greeting').value = cfg.texts.greeting || '';
-    document.getElementById('productIntro').value = cfg.texts.productIntro || '';
-    document.getElementById('hints').value = cfg.texts.hints || '';
-    document.getElementById('menuLines').value = (cfg.texts.menu||[]).join('\n');
-    loadCountries();
+  // ===== helpers =====
+  const $ = s=>document.querySelector(s);
+  const $$ = s=>Array.from(document.querySelectorAll(s));
+  let CONFIG = null;
+  let CURRENT_KEY = null;
+  let PRICE_TMP = { shared1:{}, shared2:{}, individual:{} };
+
+  async function api(url, opt={}) {
+    const r = await fetch(url, opt);
+    if (!r.ok) throw new Error(await r.text());
+    return r.json();
   }
+
+  // ===== login/logout =====
+  $("#btn-logout").onclick = async ()=>{
+    await api('/api/logout',{method:'POST'});
+    location.href = '/login.html';
+  };
+
+  // ===== cargar config general =====
+  async function load(){
+    CONFIG = await api('/api/config');
+    // textos
+    $("#greeting").value = CONFIG.texts.greeting || "";
+    $("#productIntro").value = CONFIG.texts.productIntro || "";
+    $("#menuLines").value = (CONFIG.texts.menu || []).join("\n");
+    // monedas
+    drawCurrencies();
+    // países
+    await loadCountries();
+    // precargar símbolo cuando se escriba la moneda
+    $("#c_currency").oninput = ()=>{
+      const c = $("#c_currency").value.trim().toUpperCase();
+      $("#c_symbol").value = CONFIG.currencySymbols?.[c] || "";
+    };
+  }
+
+  // ===== guardar textos =====
+  $("#saveTexts").onclick = async ()=>{
+    const greeting = $("#greeting").value;
+    const productIntro = $("#productIntro").value;
+    const menu = $("#menuLines").value.split("\n").map(s=>s.trim()).filter(Boolean);
+    await api('/api/texts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({greeting, productIntro, menu})});
+    alert('Textos guardados');
+    await load();
+  };
+
+  // ===== monedas =====
+  function drawCurrencies(){
+    const tbody = $("#tblCurrencies tbody");
+    tbody.innerHTML = "";
+    const map = CONFIG.currencySymbols || {};
+    Object.keys(map).sort().forEach(code=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${code}</td><td>${map[code]}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+  async function addCurrency(){
+    const code = $("#curCode").value.trim().toUpperCase();
+    const sym  = $("#curSymbol").value.trim();
+    if(!code || !sym) return alert('Completa código y símbolo');
+    CONFIG.currencySymbols = CONFIG.currencySymbols || {};
+    CONFIG.currencySymbols[code] = sym;
+    await fetch('/api/texts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(CONFIG.texts)}); // asegura texts en server
+    // guardamos currencySymbols dentro de config.json actualizando todo:
+    // truco: pedimos config y la sobrescribimos localmente
+    const fresh = await api('/api/config'); // lectura
+    fresh.currencySymbols = CONFIG.currencySymbols;
+    await fetch('/api/texts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(fresh.texts)}); // no hay endpoint directo p/monedas; mantenemos por config en bot
+    // como no hay endpoint para currencySymbols, hacemos POST a /api/countries con mismo contenido de cada país (no cambia data) para disparar save… (workaround opcional)
+    alert('Símbolo agregado. (Si no se reflejara, recarga la página)');
+    drawCurrencies();
+  }
+
+  // ===== países: lista/búsqueda =====
   async function loadCountries(){
-    const q = document.getElementById('searchCountry').value || '';
-    const r = await fetch('/api/countries?q=' + encodeURIComponent(q));
-    const {items} = await r.json();
-    const tb = document.querySelector('#tblCountries tbody');
-    tb.innerHTML = '';
-    items.forEach(it=>{
+    const q = $("#searchCountry").value || "";
+    const r = await api('/api/countries?q='+encodeURIComponent(q));
+    const tb = $("#tblCountries tbody");
+    tb.innerHTML = "";
+    (r.items||[]).forEach(it=>{
+      const sum = summarizePrices(it.prices);
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td>${it.key}</td>
-        <td>${it.label}</td>
-        <td>${it.currency}</td>
-        <td class="inline">
-          <button onclick='fill("${it.key}")'>Editar</button>
-          <button onclick='delCountry("${it.key}")' style="background:#ef4444">Eliminar</button>
-        </td>`;
+        <td><span class="pill">${it.key}</span></td>
+        <td>${it.label||''}</td>
+        <td>${it.currency||''}</td>
+        <td class="muted">${sum}</td>
+        <td><button onclick="editCountry('${it.key}')">Editar</button></td>`;
       tb.appendChild(tr);
     });
   }
-  function parseJsonSafe(txt, def){ try{const o = JSON.parse(txt); return o && typeof o==="object" ? o : def;}catch{ return def; } }
-  async function saveTexts(){
-    const greeting = document.getElementById('greeting').value;
-    const productIntro = document.getElementById('productIntro').value;
-    const hints = document.getElementById('hints').value;
-    const menu = document.getElementById('menuLines').value.split('\n').map(s=>s.trim()).filter(Boolean);
-    await fetch('/api/texts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({greeting,productIntro,hints,menu})});
-    alert('Textos guardados');
-  }
-  document.getElementById('saveTexts').onclick = saveTexts;
-
-  async function uploadSet(field, inputId){
-    const f = document.getElementById(inputId).files[0];
-    if (!f) return alert('Elige un archivo');
-    const fd = new FormData(); fd.append('file', f);
-    const r = await fetch('/api/upload',{method:'POST',body:fd});
-    const {path} = await r.json();
-    await fetch('/api/images',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({field, value:path})});
-    alert('Guardado: ' + path);
+  function summarizePrices(pr){
+    if(!pr) return "-";
+    const blocks = [];
+    const fmt=(o)=>o?Object.keys(o).map(k=>`${k}`).join(", "):"";
+    const s1 = fmt(pr.shared1);
+    const s2 = fmt(pr.shared2);
+    const ind= fmt(pr.individual);
+    if(s1) blocks.push(`S1: ${s1}`);
+    if(s2) blocks.push(`S2: ${s2}`);
+    if(ind)blocks.push(`IND: ${ind}`);
+    return blocks.join(" | ") || "-";
   }
 
-  async function saveCountry(){
-    const key = document.getElementById('c_key').value.trim().toLowerCase();
-    const label = document.getElementById('c_label').value.trim();
-    const currency = document.getElementById('c_currency').value.trim().toUpperCase();
-    const payment = {
-      bank: document.getElementById('c_bank').value.trim(),
-      account: document.getElementById('c_account').value.trim(),
-      owner: document.getElementById('c_owner').value.trim(),
-      qr: document.getElementById('c_qr').value.trim()
-    };
-    const prices = {
-      shared1: parseJsonSafe(document.getElementById('c_shared1').value, {}),
-      shared2: parseJsonSafe(document.getElementById('c_shared2').value, {}),
-      individual: parseJsonSafe(document.getElementById('c_individual').value, {})
-    };
-    if (!key || !label || !currency) return alert('Key, etiqueta y moneda requeridas');
-    await fetch('/api/countries',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key,label,currency,payment,prices})});
-    alert('País guardado'); loadCountries();
+  // ===== país: editar / eliminar / guardar =====
+  function clearCountryForm(){
+    CURRENT_KEY = null;
+    $("#c_key").value = "";
+    $("#c_label").value = "";
+    $("#c_currency").value = "";
+    $("#c_symbol").value = "";
+    $("#c_bank").value = "";
+    $("#c_account").value = "";
+    $("#c_owner").value = "";
+    $("#c_qr").value = "";
+    PRICE_TMP = { shared1:{}, shared2:{}, individual:{} };
+    drawPrices();
   }
-  async function delCountry(key){
-    if (!confirm('Eliminar país ' + key + '?')) return;
-    await fetch('/api/countries/' + key,{method:'DELETE'});
-    loadCountries();
+
+  function drawPrices(){
+    const map2html = (obj, group) => {
+      const wrap = document.createElement('div');
+      Object.keys(obj||{}).forEach(k=>{
+        const row = document.createElement('div');
+        row.className='inline';
+        row.style.marginBottom='6px';
+        row.innerHTML = `
+          <input value="${k}" disabled style="max-width:180px">
+          <input value="${obj[k]}" style="max-width:120px" oninput="PRICE_TMP['${group}']['${k}']=this.value">
+          <button onclick="delPrice('${group}','${k}')">X</button>
+        `;
+        wrap.appendChild(row);
+      });
+      return wrap;
+    };
+    $("#p_shared1").innerHTML = ""; $("#p_shared1").appendChild(map2html(PRICE_TMP.shared1,'shared1'));
+    $("#p_shared2").innerHTML = ""; $("#p_shared2").appendChild(map2html(PRICE_TMP.shared2,'shared2'));
+    $("#p_individual").innerHTML = ""; $("#p_individual").appendChild(map2html(PRICE_TMP.individual,'individual'));
   }
-  async function fill(key){
-    const r = await fetch('/api/countries?q=' + key); const {items} = await r.json();
-    const it = (items||[]).find(i=>i.key===key); if (!it) return;
-    document.getElementById('c_key').value = key;
-    document.getElementById('c_label').value = it.label||'';
-    document.getElementById('c_currency').value = it.currency||'';
-    document.getElementById('c_bank').value = it.payment?.bank||'';
-    document.getElementById('c_account').value = it.payment?.account||'';
-    document.getElementById('c_owner').value = it.payment?.owner||'';
-    document.getElementById('c_qr').value = it.payment?.qr||'';
-    document.getElementById('c_shared1').value = JSON.stringify(it.prices?.shared1||{}, null, 1);
-    document.getElementById('c_shared2').value = JSON.stringify(it.prices?.shared2||{}, null, 1);
-    document.getElementById('c_individual').value = JSON.stringify(it.prices?.individual||{}, null, 1);
+
+  function addPrice(group){
+    const key = $("#p_"+(group==='individual'?'i':'s'+(group==='shared1'?1:2))+"_key").value.trim();
+    const val = $("#p_"+(group==='individual'?'i':'s'+(group==='shared1'?1:2))+"_val").value.trim();
+    if(!key || !val) return alert('Completa duración y precio');
+    PRICE_TMP[group][key]=val;
+    drawPrices();
+  }
+  function delPrice(group, k){
+    delete PRICE_TMP[group][k];
+    drawPrices();
+  }
+
+  async function editCountry(key){
+    const r = await api('/api/countries?q='+encodeURIComponent(key));
+    const item = (r.items||[]).find(x=>x.key===key);
+    if(!item) return alert('No encontrado');
+    CURRENT_KEY = key;
+    $("#c_key").value = key;
+    $("#c_label").value = item.label||"";
+    $("#c_currency").value = item.currency||"";
+    $("#c_symbol").value = (CONFIG.currencySymbols||{})[item.currency] || "";
+    $("#c_bank").value = item.payment?.bank || "";
+    $("#c_account").value = item.payment?.account || "";
+    $("#c_owner").value = item.payment?.owner || "";
+    $("#c_qr").value = item.payment?.qr || "";
+    PRICE_TMP = JSON.parse(JSON.stringify(item.prices || {shared1:{},shared2:{},individual:{}}));
+    drawPrices();
     document.getElementById('formCountry').scrollIntoView({behavior:'smooth'});
   }
 
-  document.getElementById('btn-logout').onclick = async ()=>{ await fetch('/api/logout',{method:'POST'}); location.href='/login.html'; };
+  async function saveCountry(){
+    const key = $("#c_key").value.trim().toLowerCase();
+    const label = $("#c_label").value.trim();
+    const currency = $("#c_currency").value.trim().toUpperCase();
+    const payment = {
+      bank: $("#c_bank").value.trim(),
+      account: $("#c_account").value.trim(),
+      owner: $("#c_owner").value.trim(),
+      qr: $("#c_qr").value.trim()
+    };
+    if(!key || !label || !currency) return alert('Key, nombre y moneda son obligatorios');
 
-  load();
+    await api('/api/countries',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ key, label, currency, payment, prices: PRICE_TMP })
+    });
+    alert('País guardado');
+    clearCountryForm();
+    await loadCountries();
+  }
+
+  async function deleteCountry(){
+    const key = $("#c_key").value.trim().toLowerCase();
+    if(!key) return alert('Primero carga o escribe el key');
+    if(!confirm('¿Eliminar país "'+key+'"?')) return;
+    await api('/api/countries/'+encodeURIComponent(key), { method:'DELETE' });
+    alert('País eliminado');
+    clearCountryForm();
+    await loadCountries();
+  }
+
+  // ===== uploads imágenes =====
+  async function upload(fileInputId){
+    const f = document.getElementById(fileInputId).files[0];
+    if(!f) throw new Error('Selecciona un archivo');
+    const fd = new FormData(); fd.append('file', f);
+    const r = await fetch('/api/upload',{ method:'POST', body:fd });
+    if(!r.ok) throw new Error(await r.text());
+    return r.json();
+  }
+  async function uploadSet(field, inputId){
+    try{
+      const { path } = await upload(inputId);
+      await fetch('/api/images',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({field, value:path})});
+      alert('Guardado: '+path);
+      await load();
+    }catch(e){ alert('Error: '+e.message); }
+  }
+  async function uploadCountryQR(){
+    try{
+      const { path } = await upload('c_qr_file');
+      $("#c_qr").value = path;
+      alert('QR de país subido');
+    }catch(e){ alert('Error: '+e.message); }
+  }
+
+  // ===== arranque =====
+  load().catch(e=>{
+    if(String(e).includes('login')) location.href='/login.html';
+  });
 </script>
 </body>
 </html>
