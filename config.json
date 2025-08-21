@@ -1,42 +1,31 @@
 {
-  "admins": ["59167568482@s.whatsapp.net","59160457616@s.whatsapp.net"],
-  "images": {
-    "saludo": "",
-    "qr": "",
-    "references": []
-  },
+  "admins": ["59167568482@s.whatsapp.net", "59160457616@s.whatsapp.net"],
+  "images": { "saludo": "", "qr": "", "references": [] },
   "texts": {
-    "greeting": "Hola, soy *Samantha*. Estoy aquí para ayudarte ✨",
+    "greeting": "Hola, soy *Samantha*. Estoy aquí para ayudarte a elegir el plan perfecto, resolver dudas y acompañarte en todo el proceso ✨",
     "menu": [
       "1. 💲 Ver productos y precios irresistibles.",
       "2. 💎 ¿Qué es ChatGPT PLUS?",
       "3. 🖼️ Ver referencias.",
       "4. 🤝 Conectar con un vendedor.",
       "5. 💳 Ir a pagar",
-      "6. 📦 Plan Compartido",
-      "7. 👤 Plan Individual",
       "8. 🔁 Volver al menú"
     ],
     "productIntro": "Estos son nuestros planes disponibles en tu país:"
   },
-  "currencySymbols": {
-    "BOB": "Bs",
-    "ARS": "$",
-    "MXN": "$",
-    "PEN": "S/",
-    "USD": "$",
-    "EUR": "€"
-  },
+  "currencySymbols": { "BOB": "Bs", "ARS": "$", "MXN": "$", "PEN": "S/", "USD": "$", "EUR": "€" },
   "countries": {
     "bolivia": {
       "label": "Bolivia",
       "currency": "BOB",
-      "payment": { "bank": "Banco Unión", "account": "CTA 123456", "owner": "Titular Ejemplo", "qr": "" },
+      "payment": { "bank": "", "account": "", "owner": "", "qr": "" },
       "prices": {
         "shared1": { "1 mes": 35, "2 meses": 60, "6 meses": 169, "1 año": 329 },
         "shared2": { "1 mes": 60, "2 meses": 109, "6 meses": 309 },
         "individual": { "1 mes": 139, "2 meses": 269, "6 meses": 599, "1 año": 1579 }
       }
-    }
+    },
+    "argentina": { "label": "Argentina", "currency": "ARS", "payment": { "bank": "", "account": "", "owner": "", "qr": "" }, "prices": { "shared1": {}, "shared2": {}, "individual": {} } },
+    "mexico":    { "label": "México",   "currency": "MXN", "payment": { "bank": "", "account": "", "owner": "", "qr": "" }, "prices": { "shared1": {}, "shared2": {}, "individual": {} } }
   }
 }
