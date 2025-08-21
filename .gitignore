@@ -1,5 +1,5 @@
+# secretos / pesados
 .env
 node_modules/
-data/auth/
 auth/
-uploads/
+data/auth/

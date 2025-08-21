@@ -1,9 +1,8 @@
 {
-  "admins": ["59167568482@s.whatsapp.net", "59160457616@s.whatsapp.net"],
+  "admins": ["59160000000@s.whatsapp.net"],
   "images": { "saludo": "", "qr": "", "references": [] },
   "texts": {
     "greeting": "Hola, soy *Samantha*. Estoy aquí para ayudarte a elegir el plan perfecto, resolver dudas y acompañarte en todo el proceso ✨",
-    "productIntro": "Estos son nuestros planes disponibles en tu país:",
     "menu": [
       "1. 💲 Ver productos y precios irresistibles.",
       "2. 💎 ¿Qué es ChatGPT PLUS?",
@@ -11,8 +10,9 @@
       "4. 🤝 Conectar con un vendedor.",
       "5. 💳 Ir a pagar",
       "8. 🔁 Volver al menú"
-    ]
+    ],
+    "productIntro": "Estos son nuestros planes disponibles en tu país:"
   },
-  "currencySymbols": { "BOB":"Bs", "ARS":"ARS", "MXN":"$MXN", "PEN":"S/", "USD":"$", "EUR":"€" },
+  "currencySymbols": { "BOB": "Bs", "ARS": "ARS", "MXN": "$", "PEN": "S/", "USD": "$", "EUR": "€" },
   "countries": {}
 }
