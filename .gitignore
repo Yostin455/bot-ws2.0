@@ -1,6 +1,5 @@
-# secretos / pesados
 .env
 node_modules/
-auth/
 data/auth/
-data/uploads/qr-login.png
+auth/
+uploads/
