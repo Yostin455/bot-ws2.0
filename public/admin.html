@@ -3,135 +3,130 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Panel Admin — Samantha</title>
+<title>Panel Admin</title>
 <style>
   :root{--bg:#0b1220;--panel:#111a2b;--muted:#8aa0c8;--brd:#1c2a46;--acc:#2563eb}
   *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:#e8eefc}
-  header{display:flex;gap:12px;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--brd)}
-  header .right{display:flex;gap:8px;align-items:center}
-  header a, header button{padding:8px 12px;border-radius:10px;border:1px solid var(--brd);background:#0f172a;color:#e8eefc;text-decoration:none;cursor:pointer}
-  main{padding:18px;display:grid;gap:18px;grid-template-columns:1fr 1fr}
-  .card{background:var(--panel);border:1px solid var(--brd);border-radius:16px;padding:16px}
+  body{margin:0;font-family:system-ui,Arial;background:var(--bg);color:#e8eefc}
+  header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--brd)}
+  main{padding:20px;display:grid;gap:20px;grid-template-columns:1fr 1fr}
+  .card{background:var(--panel);border:1px solid var(--brd);border-radius:16px;padding:18px}
   h2{margin:0 0 10px}
-  small{color:var(--muted)}
   input,textarea,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--brd);background:#0f172a;color:#e8eefc;margin:6px 0}
   button{padding:10px 14px;border-radius:10px;border:0;background:var(--acc);color:#fff;font-weight:600;cursor:pointer}
-  table{width:100%;border-collapse:collapse;margin-top:8px}
+  small{color:var(--muted)}
+  table{width:100%;border-collapse:collapse;margin-top:10px}
   th,td{border-bottom:1px solid var(--brd);padding:8px;text-align:left;vertical-align:top}
   .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
   .inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .muted{color:var(--muted)}
-  @media(max-width:1100px){ main{grid-template-columns:1fr} }
+  .right{text-align:right}
   .pill{display:inline-block;background:#0f172a;border:1px solid var(--brd);padding:6px 10px;border-radius:999px}
-  .danger{background:#b91c1c}
+  .muted{color:var(--muted)}
+  img.thumb{max-height:120px;border-radius:10px;border:1px solid var(--brd)}
+  .danger{background:#dc2626}
+  .ghost{background:transparent;border:1px solid var(--brd)}
+  @media(max-width:1100px){ main{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
 <header>
-  <div><strong>Panel Admin — Samantha</strong></div>
-  <div class="right">
-    <a href="/login.html">Login</a>
-    <button id="btn-logout">Salir</button>
+  <div class="inline">
+    <strong>Panel Admin</strong>
+    <a class="pill" href="/qr" target="_blank">📷 Ver QR</a>
+    <a class="pill" href="/status" target="_blank">📊 Estado</a>
+  </div>
+  <div class="inline">
+    <button id="btn-logout" class="ghost">Salir</button>
   </div>
 </header>
 
 <main>
-
-  <!-- TEXTOS -->
+  <!-- Textos -->
   <section class="card">
     <h2>Textos del bot</h2>
-    <label>Saludo del menú</label>
-    <textarea id="greeting" rows="3" placeholder="Hola, soy Samantha…"></textarea>
+    <label>Saludo</label>
+    <textarea id="tx_greeting" rows="3" placeholder="Hola, soy Samantha…"></textarea>
 
     <label>Intro de productos</label>
-    <input id="productIntro" placeholder="Estos son nuestros planes…" />
+    <input id="tx_productIntro" placeholder="Estos son nuestros planes disponibles en tu país:" />
 
     <label>Opciones de menú (1 por línea)</label>
-    <textarea id="menuLines" rows="7" placeholder="1. Ver productos…&#10;2. ¿Qué es ChatGPT PLUS?&#10;5. Ir a pagar&#10;8. Volver al menú"></textarea>
+    <textarea id="tx_menu" rows="6" placeholder="1. Ver productos…&#10;2. ¿Qué es ChatGPT PLUS?&#10;5. Ir a pagar&#10;8. Volver al menú"></textarea>
 
     <div class="inline">
-      <button id="saveTexts">Guardar textos</button>
-      <span class="muted">El bot se actualiza al instante.</span>
+      <button id="btnSaveTexts">Guardar textos</button>
+      <small class="muted">El bot usa esto al mostrar el menú.</small>
     </div>
   </section>
 
-  <!-- IMÁGENES -->
+  <!-- Imágenes -->
   <section class="card">
     <h2>Imágenes</h2>
     <div class="row">
       <div>
         <label>Imagen de saludo</label>
-        <input type="file" id="fileSaludo" accept="image/*" />
-        <button onclick="uploadSet('saludo','fileSaludo')">Subir & Guardar</button>
+        <input type="file" id="fileSaludo" accept="image/*"/>
+        <div class="inline">
+          <button onclick="uploadSet('saludo','fileSaludo')">Subir y guardar</button>
+          <img id="prevSaludo" class="thumb" alt="">
+        </div>
       </div>
       <div>
-        <label>QR de pago (general)</label>
-        <input type="file" id="fileQR" accept="image/*" />
-        <button onclick="uploadSet('qr','fileQR')">Subir & Guardar</button>
+        <label>QR global por defecto</label>
+        <input type="file" id="fileQR" accept="image/*"/>
+        <div class="inline">
+          <button onclick="uploadSet('qr','fileQR')">Subir y guardar</button>
+          <img id="prevQR" class="thumb" alt="">
+        </div>
       </div>
     </div>
+
     <hr style="border-color:#1c2a46">
-    <label>Referencias (se agrega de a 1)</label>
+    <label>Referencias (galería)</label>
     <div class="inline">
-      <input type="file" id="fileRef" accept="image/*" />
+      <input type="file" id="fileRef" accept="image/*"/>
       <button onclick="uploadSet('references:add','fileRef')">Agregar</button>
-      <button onclick="fetch('/api/images',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({field:'references:clear'})}).then(load)">Vaciar</button>
+      <button class="danger" onclick="fetch('/api/images',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({field:'references:clear'})}).then(loadConfig)">Vaciar</button>
     </div>
+    <div id="refsList" class="inline" style="margin-top:10px;"></div>
   </section>
 
-  <!-- MONEDAS -->
-  <section class="card">
-    <h2>Monedas (símbolos)</h2>
-    <div class="inline">
-      <input id="curCode" placeholder="Código ISO (ej. PEN)" style="max-width:140px">
-      <input id="curSymbol" placeholder="Símbolo (ej. S/ )" style="max-width:140px">
-      <button onclick="addCurrency()">Añadir / Actualizar</button>
-    </div>
-    <table id="tblCurrencies">
-      <thead><tr><th>Código</th><th>Símbolo</th></tr></thead>
-      <tbody></tbody>
-    </table>
-    <small>El símbolo se usa al mostrar precios por país.</small>
-  </section>
-
-  <!-- PAÍSES: BÚSQUEDA + LISTA -->
+  <!-- Países: búsqueda + tabla -->
   <section class="card" style="grid-column:1/-1">
     <h2>Países</h2>
     <div class="inline">
-      <input id="searchCountry" placeholder="Buscar (key, nombre o moneda)..." oninput="loadCountries()">
+      <input id="searchCountry" placeholder="Buscar (key, nombre o moneda)..." oninput="loadCountries()"/>
       <button onclick="loadCountries()">Buscar</button>
-      <span class="muted">Añade o edita abajo</span>
+      <button onclick="clearCountryForm();document.getElementById('formCountry').scrollIntoView({behavior:'smooth'})">Añadir/Editar</button>
     </div>
 
     <table id="tblCountries">
       <thead>
-        <tr><th>Key</th><th>País</th><th>Moneda</th><th>Precios (resumen)</th><th>Acciones</th></tr>
+        <tr><th>Key</th><th>Nombre</th><th>Moneda</th><th>Pagos</th><th>Acciones</th></tr>
       </thead>
       <tbody></tbody>
     </table>
   </section>
 
-  <!-- FORM PAÍS -->
+  <!-- Form país -->
   <section id="formCountry" class="card" style="grid-column:1/-1">
     <h2>Añadir / Editar país</h2>
-
     <div class="row">
       <div>
-        <label>Key (minúsculas, sin espacios) <small class="muted">ej. peru</small></label>
-        <input id="c_key" />
+        <label>Key (ej. peru)</label>
+        <input id="c_key" placeholder="minúsculas, sin espacios" />
       </div>
       <div>
-        <label>Nombre visible</label>
+        <label>Nombre/Label</label>
         <input id="c_label" placeholder="Perú" />
       </div>
     </div>
 
     <div class="row">
       <div>
-        <label>Moneda (código ISO) <small class="muted">ej. PEN, ARS, BOB</small></label>
-        <input id="c_currency" placeholder="PEN" />
+        <label>Moneda (código ISO, ej. PEN, ARS, BOB)</label>
+        <input id="c_currency" placeholder="PEN" oninput="renderSymbol()" />
       </div>
       <div>
         <label>Símbolo detectado</label>
@@ -139,293 +134,209 @@
       </div>
     </div>
 
-    <h3>Pago</h3>
-    <div class="grid3">
-      <div><label>Banco</label><input id="c_bank"></div>
-      <div><label>N° de cuenta / CBU / CLABE</label><input id="c_account"></div>
-      <div><label>Titular</label><input id="c_owner"></div>
-    </div>
-    <div class="inline">
-      <input type="file" id="c_qr_file" accept="image/*">
-      <button onclick="uploadCountryQR()">Subir QR país</button>
-      <input id="c_qr" placeholder="Ruta QR (se llena al subir)" style="flex:1">
-    </div>
-
-    <h3>Precios</h3>
-    <div class="row">
-      <div>
-        <h4>Plan Compartido 1</h4>
-        <div id="p_shared1"></div>
-        <div class="inline">
-          <input id="p_s1_key" placeholder="Ej. 1 mes">
-          <input id="p_s1_val" placeholder="Ej. 35">
-          <button onclick="addPrice('shared1')">Añadir</button>
-        </div>
-      </div>
-      <div>
-        <h4>Plan Compartido 2</h4>
-        <div id="p_shared2"></div>
-        <div class="inline">
-          <input id="p_s2_key" placeholder="Ej. 1 mes">
-          <input id="p_s2_val" placeholder="Ej. 60">
-          <button onclick="addPrice('shared2')">Añadir</button>
-        </div>
-      </div>
+    <div class="row3">
+      <div><label>Banco</label><input id="c_bank" /></div>
+      <div><label>N° Cuenta</label><input id="c_account" /></div>
+      <div><label>Titular</label><input id="c_owner" /></div>
     </div>
 
     <div>
-      <h4>Plan Individual</h4>
-      <div id="p_individual"></div>
+      <label>QR de pago (URL o sube archivo)</label>
       <div class="inline">
-        <input id="p_i_key" placeholder="Ej. 1 mes">
-        <input id="p_i_val" placeholder="Ej. 139">
-        <button onclick="addPrice('individual')">Añadir</button>
+        <input id="c_qr" placeholder="/media/xxxxx.png o https://..." style="flex:1"/>
+        <input type="file" id="fileQRcountry" accept="image/*"/>
+        <button onclick="uploadSetInto('fileQRcountry','c_qr')">Subir</button>
       </div>
+    </div>
+
+    <h3 style="margin-top:16px">Precios (se mostrará con símbolo)</h3>
+    <div class="row">
+      <div>
+        <label>Compartido 1 (JSON)</label>
+        <textarea id="p_shared1" rows="4" placeholder='{"1 mes": 35, "2 meses": 60}'></textarea>
+      </div>
+      <div>
+        <label>Compartido 2 (JSON)</label>
+        <textarea id="p_shared2" rows="4" placeholder='{"1 mes": 60, "2 meses": 109}'></textarea>
+      </div>
+    </div>
+    <div>
+      <label>Individual (JSON)</label>
+      <textarea id="p_individual" rows="4" placeholder='{"1 mes": 139, "2 meses": 269}'></textarea>
     </div>
 
     <div class="inline" style="margin-top:10px">
       <button onclick="saveCountry()">Guardar país</button>
       <button class="danger" onclick="deleteCountry()">Eliminar país</button>
-      <span class="muted">El prompt de país del bot se actualiza con esta lista.</span>
     </div>
   </section>
-
 </main>
 
 <script>
-  // ===== helpers =====
-  const $ = s=>document.querySelector(s);
-  const $$ = s=>Array.from(document.querySelectorAll(s));
-  let CONFIG = null;
-  let CURRENT_KEY = null;
-  let PRICE_TMP = { shared1:{}, shared2:{}, individual:{} };
-
-  async function api(url, opt={}) {
-    const r = await fetch(url, opt);
-    if (!r.ok) throw new Error(await r.text());
-    return r.json();
-  }
-
-  // ===== login/logout =====
-  $("#btn-logout").onclick = async ()=>{
-    await api('/api/logout',{method:'POST'});
-    location.href = '/login.html';
-  };
-
-  // ===== cargar config general =====
-  async function load(){
-    CONFIG = await api('/api/config');
-    // textos
-    $("#greeting").value = CONFIG.texts.greeting || "";
-    $("#productIntro").value = CONFIG.texts.productIntro || "";
-    $("#menuLines").value = (CONFIG.texts.menu || []).join("\n");
-    // monedas
-    drawCurrencies();
-    // países
-    await loadCountries();
-    // precargar símbolo cuando se escriba la moneda
-    $("#c_currency").oninput = ()=>{
-      const c = $("#c_currency").value.trim().toUpperCase();
-      $("#c_symbol").value = CONFIG.currencySymbols?.[c] || "";
-    };
-  }
-
-  // ===== guardar textos =====
-  $("#saveTexts").onclick = async ()=>{
-    const greeting = $("#greeting").value;
-    const productIntro = $("#productIntro").value;
-    const menu = $("#menuLines").value.split("\n").map(s=>s.trim()).filter(Boolean);
-    await api('/api/texts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({greeting, productIntro, menu})});
-    alert('Textos guardados');
-    await load();
-  };
-
-  // ===== monedas =====
-  function drawCurrencies(){
-    const tbody = $("#tblCurrencies tbody");
-    tbody.innerHTML = "";
-    const map = CONFIG.currencySymbols || {};
-    Object.keys(map).sort().forEach(code=>{
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${code}</td><td>${map[code]}</td>`;
-      tbody.appendChild(tr);
-    });
-  }
-  async function addCurrency(){
-    const code = $("#curCode").value.trim().toUpperCase();
-    const sym  = $("#curSymbol").value.trim();
-    if(!code || !sym) return alert('Completa código y símbolo');
-    CONFIG.currencySymbols = CONFIG.currencySymbols || {};
-    CONFIG.currencySymbols[code] = sym;
-    await fetch('/api/texts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(CONFIG.texts)}); // asegura texts en server
-    // guardamos currencySymbols dentro de config.json actualizando todo:
-    // truco: pedimos config y la sobrescribimos localmente
-    const fresh = await api('/api/config'); // lectura
-    fresh.currencySymbols = CONFIG.currencySymbols;
-    await fetch('/api/texts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(fresh.texts)}); // no hay endpoint directo p/monedas; mantenemos por config en bot
-    // como no hay endpoint para currencySymbols, hacemos POST a /api/countries con mismo contenido de cada país (no cambia data) para disparar save… (workaround opcional)
-    alert('Símbolo agregado. (Si no se reflejara, recarga la página)');
-    drawCurrencies();
-  }
-
-  // ===== países: lista/búsqueda =====
-  async function loadCountries(){
-    const q = $("#searchCountry").value || "";
-    const r = await api('/api/countries?q='+encodeURIComponent(q));
-    const tb = $("#tblCountries tbody");
-    tb.innerHTML = "";
-    (r.items||[]).forEach(it=>{
-      const sum = summarizePrices(it.prices);
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><span class="pill">${it.key}</span></td>
-        <td>${it.label||''}</td>
-        <td>${it.currency||''}</td>
-        <td class="muted">${sum}</td>
-        <td><button onclick="editCountry('${it.key}')">Editar</button></td>`;
-      tb.appendChild(tr);
-    });
-  }
-  function summarizePrices(pr){
-    if(!pr) return "-";
-    const blocks = [];
-    const fmt=(o)=>o?Object.keys(o).map(k=>`${k}`).join(", "):"";
-    const s1 = fmt(pr.shared1);
-    const s2 = fmt(pr.shared2);
-    const ind= fmt(pr.individual);
-    if(s1) blocks.push(`S1: ${s1}`);
-    if(s2) blocks.push(`S2: ${s2}`);
-    if(ind)blocks.push(`IND: ${ind}`);
-    return blocks.join(" | ") || "-";
-  }
-
-  // ===== país: editar / eliminar / guardar =====
-  function clearCountryForm(){
-    CURRENT_KEY = null;
-    $("#c_key").value = "";
-    $("#c_label").value = "";
-    $("#c_currency").value = "";
-    $("#c_symbol").value = "";
-    $("#c_bank").value = "";
-    $("#c_account").value = "";
-    $("#c_owner").value = "";
-    $("#c_qr").value = "";
-    PRICE_TMP = { shared1:{}, shared2:{}, individual:{} };
-    drawPrices();
-  }
-
-  function drawPrices(){
-    const map2html = (obj, group) => {
-      const wrap = document.createElement('div');
-      Object.keys(obj||{}).forEach(k=>{
-        const row = document.createElement('div');
-        row.className='inline';
-        row.style.marginBottom='6px';
-        row.innerHTML = `
-          <input value="${k}" disabled style="max-width:180px">
-          <input value="${obj[k]}" style="max-width:120px" oninput="PRICE_TMP['${group}']['${k}']=this.value">
-          <button onclick="delPrice('${group}','${k}')">X</button>
-        `;
-        wrap.appendChild(row);
-      });
-      return wrap;
-    };
-    $("#p_shared1").innerHTML = ""; $("#p_shared1").appendChild(map2html(PRICE_TMP.shared1,'shared1'));
-    $("#p_shared2").innerHTML = ""; $("#p_shared2").appendChild(map2html(PRICE_TMP.shared2,'shared2'));
-    $("#p_individual").innerHTML = ""; $("#p_individual").appendChild(map2html(PRICE_TMP.individual,'individual'));
-  }
-
-  function addPrice(group){
-    const key = $("#p_"+(group==='individual'?'i':'s'+(group==='shared1'?1:2))+"_key").value.trim();
-    const val = $("#p_"+(group==='individual'?'i':'s'+(group==='shared1'?1:2))+"_val").value.trim();
-    if(!key || !val) return alert('Completa duración y precio');
-    PRICE_TMP[group][key]=val;
-    drawPrices();
-  }
-  function delPrice(group, k){
-    delete PRICE_TMP[group][k];
-    drawPrices();
-  }
-
-  async function editCountry(key){
-    const r = await api('/api/countries?q='+encodeURIComponent(key));
-    const item = (r.items||[]).find(x=>x.key===key);
-    if(!item) return alert('No encontrado');
-    CURRENT_KEY = key;
-    $("#c_key").value = key;
-    $("#c_label").value = item.label||"";
-    $("#c_currency").value = item.currency||"";
-    $("#c_symbol").value = (CONFIG.currencySymbols||{})[item.currency] || "";
-    $("#c_bank").value = item.payment?.bank || "";
-    $("#c_account").value = item.payment?.account || "";
-    $("#c_owner").value = item.payment?.owner || "";
-    $("#c_qr").value = item.payment?.qr || "";
-    PRICE_TMP = JSON.parse(JSON.stringify(item.prices || {shared1:{},shared2:{},individual:{}}));
-    drawPrices();
-    document.getElementById('formCountry').scrollIntoView({behavior:'smooth'});
-  }
-
-  async function saveCountry(){
-    const key = $("#c_key").value.trim().toLowerCase();
-    const label = $("#c_label").value.trim();
-    const currency = $("#c_currency").value.trim().toUpperCase();
-    const payment = {
-      bank: $("#c_bank").value.trim(),
-      account: $("#c_account").value.trim(),
-      owner: $("#c_owner").value.trim(),
-      qr: $("#c_qr").value.trim()
-    };
-    if(!key || !label || !currency) return alert('Key, nombre y moneda son obligatorios');
-
-    await api('/api/countries',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ key, label, currency, payment, prices: PRICE_TMP })
-    });
-    alert('País guardado');
-    clearCountryForm();
-    await loadCountries();
-  }
-
-  async function deleteCountry(){
-    const key = $("#c_key").value.trim().toLowerCase();
-    if(!key) return alert('Primero carga o escribe el key');
-    if(!confirm('¿Eliminar país "'+key+'"?')) return;
-    await api('/api/countries/'+encodeURIComponent(key), { method:'DELETE' });
-    alert('País eliminado');
-    clearCountryForm();
-    await loadCountries();
-  }
-
-  // ===== uploads imágenes =====
-  async function upload(fileInputId){
-    const f = document.getElementById(fileInputId).files[0];
-    if(!f) throw new Error('Selecciona un archivo');
-    const fd = new FormData(); fd.append('file', f);
-    const r = await fetch('/api/upload',{ method:'POST', body:fd });
+  // ===== Helpers =====
+  async function api(url, opts={}){
+    const r = await fetch(url, opts);
     if(!r.ok) throw new Error(await r.text());
     return r.json();
   }
-  async function uploadSet(field, inputId){
-    try{
-      const { path } = await upload(inputId);
-      await fetch('/api/images',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({field, value:path})});
-      alert('Guardado: '+path);
-      await load();
-    }catch(e){ alert('Error: '+e.message); }
-  }
-  async function uploadCountryQR(){
-    try{
-      const { path } = await upload('c_qr_file');
-      $("#c_qr").value = path;
-      alert('QR de país subido');
-    }catch(e){ alert('Error: '+e.message); }
+  function textToArray(txt){ return txt.split(/\r?\n/).map(s=>s.trim()).filter(Boolean); }
+  function arrayToText(arr){ return (arr||[]).join('\n'); }
+
+  // ===== Estado cargado =====
+  let CFG = null;
+
+  // ===== Cargar config completa =====
+  async function loadConfig(){
+    const r = await api('/api/config');
+    CFG = r;
+    // textos
+    document.getElementById('tx_greeting').value = r.texts?.greeting || '';
+    document.getElementById('tx_productIntro').value = r.texts?.productIntro || '';
+    document.getElementById('tx_menu').value = arrayToText(r.texts?.menu || []);
+
+    // imágenes preview
+    document.getElementById('prevSaludo').src = r.images?.saludo || '';
+    document.getElementById('prevQR').src = r.images?.qr || '';
+
+    // referencias
+    const refsWrap = document.getElementById('refsList');
+    refsWrap.innerHTML = '';
+    (r.images?.references || []).forEach(u=>{
+      const img = document.createElement('img');
+      img.src = u; img.className='thumb';
+      refsWrap.appendChild(img);
+    });
+
+    // tabla países
+    loadCountries();
+    renderSymbol();
   }
 
-  // ===== arranque =====
-  load().catch(e=>{
-    if(String(e).includes('login')) location.href='/login.html';
-  });
+  // ===== Guardar textos =====
+  document.getElementById('btnSaveTexts').onclick = async () => {
+    const body = {
+      greeting: document.getElementById('tx_greeting').value,
+      productIntro: document.getElementById('tx_productIntro').value,
+      menu: textToArray(document.getElementById('tx_menu').value)
+    };
+    await api('/api/texts',{
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)
+    });
+    await loadConfig();
+    alert('Textos guardados');
+  };
+
+  // ===== Uploads generales (saludo / qr / refs) =====
+  async function uploadSet(field, inputId){
+    const inp = document.getElementById(inputId);
+    if(!inp.files || !inp.files[0]){ alert('Elige un archivo'); return; }
+    const fd = new FormData(); fd.append('file', inp.files[0]);
+    const up = await fetch('/api/upload',{method:'POST', body:fd}).then(r=>r.json());
+    if(!up.ok){ alert('Error subiendo'); return; }
+    await fetch('/api/images',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({field, value: up.path})});
+    await loadConfig();
+  }
+  async function uploadSetInto(fileInputId, targetInputId){
+    const inp = document.getElementById(fileInputId);
+    if(!inp.files || !inp.files[0]){ alert('Elige un archivo'); return; }
+    const fd = new FormData(); fd.append('file', inp.files[0]);
+    const up = await fetch('/api/upload',{method:'POST', body:fd}).then(r=>r.json());
+    if(!up.ok){ alert('Error subiendo'); return; }
+    document.getElementById(targetInputId).value = up.path;
+  }
+
+  // ===== Países: tabla y búsqueda =====
+  async function loadCountries(){
+    const q = document.getElementById('searchCountry').value || '';
+    const r = await api('/api/countries'+(q?`?q=${encodeURIComponent(q)}`:''));
+    const tb = document.querySelector('#tblCountries tbody');
+    tb.innerHTML = '';
+    (r.items||[]).forEach(it=>{
+      const pay = it.payment || {};
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><code>${it.key}</code></td>
+        <td>${it.label||''}</td>
+        <td>${it.currency||''}</td>
+        <td><small class="muted">${pay.bank||'-'} • ${pay.account||'-'} • ${pay.owner||'-'}</small></td>
+        <td class="inline">
+          <button class="ghost" onclick='editCountry(${JSON.stringify(it).replaceAll("'", "\\'")})'>Editar</button>
+        </td>`;
+      tb.appendChild(tr);
+    });
+  }
+
+  function clearCountryForm(){
+    ['c_key','c_label','c_currency','c_symbol','c_bank','c_account','c_owner','c_qr','p_shared1','p_shared2','p_individual'].forEach(id=>{
+      document.getElementById(id).value = '';
+    });
+  }
+
+  function editCountry(it){
+    document.getElementById('c_key').value = it.key || '';
+    document.getElementById('c_label').value = it.label || '';
+    document.getElementById('c_currency').value = it.currency || '';
+    document.getElementById('c_bank').value = it.payment?.bank || '';
+    document.getElementById('c_account').value = it.payment?.account || '';
+    document.getElementById('c_owner').value = it.payment?.owner || '';
+    document.getElementById('c_qr').value = it.payment?.qr || '';
+    document.getElementById('p_shared1').value = JSON.stringify(it.prices?.shared1||{}, null, 2);
+    document.getElementById('p_shared2').value = JSON.stringify(it.prices?.shared2||{}, null, 2);
+    document.getElementById('p_individual').value = JSON.stringify(it.prices?.individual||{}, null, 2);
+    renderSymbol();
+    document.getElementById('formCountry').scrollIntoView({behavior:'smooth'});
+  }
+
+  function renderSymbol(){
+    const cur = document.getElementById('c_currency').value.trim().toUpperCase();
+    const sym = (CFG?.currencySymbols && CFG.currencySymbols[cur]) || '';
+    document.getElementById('c_symbol').value = sym;
+  }
+
+  async function saveCountry(){
+    const key = document.getElementById('c_key').value.trim().toLowerCase();
+    const label = document.getElementById('c_label').value.trim();
+    const currency = document.getElementById('c_currency').value.trim().toUpperCase();
+    if(!key || !label || !currency){ alert('Key, nombre y moneda son obligatorios'); return; }
+
+    let shared1={}, shared2={}, individual={};
+    try{ shared1 = JSON.parse(document.getElementById('p_shared1').value || '{}'); }catch{ alert('JSON inválido en Compartido 1'); return; }
+    try{ shared2 = JSON.parse(document.getElementById('p_shared2').value || '{}'); }catch{ alert('JSON inválido en Compartido 2'); return; }
+    try{ individual = JSON.parse(document.getElementById('p_individual').value || '{}'); }catch{ alert('JSON inválido en Individual'); return; }
+
+    const body = {
+      key, label, currency,
+      payment:{
+        bank: document.getElementById('c_bank').value,
+        account: document.getElementById('c_account').value,
+        owner: document.getElementById('c_owner').value,
+        qr: document.getElementById('c_qr').value
+      },
+      prices:{ shared1, shared2, individual }
+    };
+    await api('/api/countries',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    await loadConfig();
+    alert('País guardado');
+  }
+
+  async function deleteCountry(){
+    const key = document.getElementById('c_key').value.trim().toLowerCase();
+    if(!key){ alert('Ingresa la key del país a eliminar'); return; }
+    if(!confirm('¿Eliminar país '+key+'?')) return;
+    await api('/api/countries/'+encodeURIComponent(key), { method:'DELETE' });
+    await loadConfig();
+    clearCountryForm();
+    alert('País eliminado');
+  }
+
+  // ===== Logout =====
+  document.getElementById('btn-logout').onclick = async ()=>{
+    await fetch('/api/logout',{method:'POST'});
+    location.href = '/login.html';
+  };
+
+  // ===== Init =====
+  loadConfig().catch(e=>{ alert('No se pudo cargar la configuración. ¿Iniciaste sesión?'); location.href='/login.html'; });
 </script>
 </body>
 </html>
